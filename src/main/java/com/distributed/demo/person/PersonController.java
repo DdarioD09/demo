@@ -1,0 +1,41 @@
+package com.distributed.demo.person;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping(path = "api/v1/person")
+public class PersonController {
+    private final PersonService personService;
+
+    @Autowired
+    public PersonController(PersonService personService) {
+        this.personService = personService;
+    }
+
+    @GetMapping
+    public List<Person> getPersons() {
+        return personService.getPersons();
+    }
+
+    @PostMapping
+    public void registerNewPerson(@RequestBody Person person){
+        personService.addNewPerson(person);
+    }
+
+    @DeleteMapping(path = "{studentId}")
+    public void deletePerson(@PathVariable("studentId") Long personId) {
+        personService.deletePerson(personId);
+    }
+
+    @PutMapping(path = "{personId}")
+    public void updatePerson(
+            @PathVariable("personId") Long personId,
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String lastname
+    ) {
+        personService.updatePerson(personId, name, lastname);
+    }
+}
